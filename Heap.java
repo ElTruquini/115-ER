@@ -20,7 +20,7 @@ public class Heap {
 
 	//Creates an empty heap
 	public Heap() {
-		heapArray = new Comparable[MAX];// REVISIT SIZE THAT I WANT TO USE**********************
+		heapArray = new Comparable[MAX];
 		size = 0;
 	}
 
@@ -28,7 +28,7 @@ public class Heap {
 	* @return True if the heap is empty, false if it is not.
 	*/
 	public boolean isEmpty (){
-		return size==0; //heapArray.size() == 0;
+		return size==0; 
 	}
 
 	/**
