@@ -13,8 +13,9 @@ import java.util.NoSuchElementException;
 
 public class Heap {
 
-	static final int MAX = 100;
+	static final int MAX = 1;
 	int size;
+	int sizeCounter;
 
 	private Comparable[] heapArray;
 
@@ -22,6 +23,7 @@ public class Heap {
 	public Heap() {
 		heapArray = new Comparable[MAX];
 		size = 0;
+		sizeCounter = 1;
 	}
 
 	/**
@@ -38,19 +40,35 @@ public class Heap {
 		return size;
 	}
 
+	//Internal method used when the size of the array is increased
+	public void copyArray(){
+		Comparable[] newArray = new Comparable[MAX*sizeCounter];
+		//System.out.println("Coping items into new array....");
+		for (int i = 0 ; i < size; i++){
+			newArray[i] = heapArray[i];
+		}
+		heapArray = newArray;
+	}
+
 	/**
 	 * Inserts an item into the heap.
 	 * @param item - The newly added item.
 	 */
 	public void insert (java.lang.Comparable item){
+		//checks if there is space for new item
+		if (size == MAX*sizeCounter){
+			//System.out.println("Doubling size of array....");
+			sizeCounter ++;
+			copyArray();
+		}
 		heapArray[size]= item;
 
 		//trickle new item up to appropriate spot in the tree
 		int place = size;
 		int parent = (place-1)/2;
 		Comparable[] temp = new Comparable[1];
-		System.out.println("INSERTING " + item);
-		System.out.println("Place compare to Parent " + heapArray[place].compareTo(heapArray[parent]));
+		//System.out.println("INSERTING " + item);
+		//System.out.println("Place compare to Parent " + heapArray[place].compareTo(heapArray[parent]));
 		
 		while ( (parent >= 0) && (heapArray[place].compareTo(heapArray[parent]) < 0)){
 			temp[0] = heapArray[place];
@@ -70,10 +88,12 @@ public class Heap {
 			throw new RuntimeException("Heap is empty.");
 		}
 		//copy the item from the last node into the root
-		heapArray[0]=heapArray[size-1];
+		Comparable[] temp = new Comparable[1];
+		temp[0] = heapArray[0];
+		heapArray[0] = heapArray[size-1];
 		size --;
 		heapRebuild(0, size);
-		return heapArray[0]; 
+		return temp[0]; 
 	}
 
 	/**
@@ -91,7 +111,7 @@ public class Heap {
 	//Internal helper method used to rebuild heap after deletion of root.
 	public void heapRebuild (int root, int size){
 		Comparable[] temp = new Comparable[1];
-		System.out.println("\nHEAP REBUILD");
+		//System.out.println("\nHEAP REBUILD");
 		int child, rightChild; 
 		if (root+1 <= size ){ //if root is not leaf
 			child = 2 * root +1;
@@ -127,7 +147,7 @@ public class Heap {
 
 	// Used for internal testing purposes
 	public static void main(String[] args) {
-		/*
+	/*	
 		Heap test = new Heap ();
 		ER_Patient p1 = new ER_Patient("Walk-in"); //4
 		ER_Patient p2 = new ER_Patient("Life-threatening"); //1
@@ -138,24 +158,24 @@ public class Heap {
 
 		//System.out.println(p1);
 		//System.out.println(p5);
-		test.removeRootItem();
-		test.getRootItem();
+		//test.removeRootItem();
+		//test.getRootItem();
 		
 		test.insert(p1);
 		test.insert(p2);
-		test.insert(p3);
+		test.insert(p3);		
 		test.insert(p4);
 		test.insert(p5);
 		test.insert(p6);
 
 		test.print();
-		
+		/*
 		test.removeRootItem();
 		test.print();
 		//System.out.println("Compare:");
 		//System.out.println(p1.compareTo(p2));
 		//test.heapRebuild(0, test.size());
-		*/	
+	*/	
 
 	}
 
